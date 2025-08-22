@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Air Dust Glyph">
+    <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#2E3D44"/>
+            <stop offset="1" stop-color="#223037"/>
+        </linearGradient>
+    </defs>
+    <!-- 구름 -->
+    <path fill="url(#g)"
+          d="M85 66c9 0 16 7 16 16s-7 16-16 16H47c-13 0-24-11-24-24 0-11.4 7.7-21.1 18.3-23.8 3.8-15 17.1-26.2 33-26.2 14.8 0 27.3 9.3 31.8 22.5 2-.5 4.1-.7 6.2-.7 12.4 0 22.5 10.1 22.5 22.5 0 2.9-.6 5.8-1.7 8.4-6.1-1.1-14.3-.6-46.1-.6z"/>
+    <!-- 도트 -->
+    <g fill="#2E3D44" opacity="0.28">
+        <circle cx="44" cy="58" r="2.2"/>
+        <circle cx="58" cy="54" r="1.8"/>
+        <circle cx="72" cy="60" r="1.8"/>
+        <circle cx="88" cy="56" r="1.6"/>
+        <circle cx="98" cy="64" r="2.2"/>
+    </g>
+</svg>
