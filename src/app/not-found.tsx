@@ -1,18 +1,15 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { MainLayout } from '@/components';
+import { MainLayout, Logo } from '@/components';
 
 export default function NotFound() {
   return (
     <MainLayout>
       <section className='container mx-auto px-6 py-16 flex flex-col items-center justify-center text-center min-h-[60vh]'>
-        <div className='relative w-40 h-40 mb-8'>
-          <Image
-            src='/logo.svg'
-            alt='Logo'
-            fill
-            className='opacity-80 dark:opacity-90'
-            priority
+        <div className='w-40 h-40 mb-8 opacity-80 dark:opacity-90'>
+          <Logo
+            className='w-full h-full'
+            aria-label='Logo'
+            role='img'
           />
         </div>
 

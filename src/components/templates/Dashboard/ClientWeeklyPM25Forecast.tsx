@@ -9,22 +9,27 @@ type Props = {
   initialData?: WeeklyPM25ForecastItem;
 };
 
+function wrapWeekly(item: WeeklyPM25ForecastItem | undefined) {
+  const items = item ? [item] : [];
+  return {
+    response: {
+      header: { resultCode: '00', resultMsg: 'OK' },
+      body: { totalCount: items.length, pageNo: 1, numOfRows: items.length, items },
+    },
+  } as const;
+}
+
 export default function ClientWeeklyPM25Forecast({ initialData }: Props) {
-  // 서버 데이터가 없는 경우에만 클라이언트 쿼리 실행
   const { data, isLoading, isError } = useQuery({
     queryKey: ['airQuality', 'weeklyPM25Forecast'],
     queryFn: fetchWeeklyPM25Forecast,
     staleTime: 3 * 60 * 60 * 1000, // 3시간
-    enabled: !initialData,
+    initialData: initialData ? wrapWeekly(initialData) : undefined,
   });
 
-  // 데이터 소스 결정 (서버 데이터 우선, 없으면 클라이언트 데이터)
-  const item = initialData || data?.response?.body?.items?.[0];
+  const item = data?.response?.body?.items?.[0];
 
-  // 로딩 상태 확인
-  const isClientLoading = !initialData && isLoading;
-
-  if (isClientLoading) {
+  if (isLoading) {
     return <ForecastSkeleton />;
   }
 

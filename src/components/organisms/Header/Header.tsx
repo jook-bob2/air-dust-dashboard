@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { ThemeSwitcher, SearchBar } from '@/components';
+import { ThemeSwitcher, SearchBar, Logo } from '@/components';
 import { useState } from 'react';
 
 const navItems = [
@@ -23,11 +22,10 @@ export default function Header() {
           <Link
             href='/'
             className='flex items-center space-x-2'>
-            <Image
-              src='/logo.svg'
-              alt='Logo'
-              width={40}
-              height={40}
+            <Logo
+              className='w-10 h-10'
+              aria-label='Logo'
+              role='img'
             />
             <span className='text-xl font-bold text-primary'>미세먼지 알리미</span>
           </Link>

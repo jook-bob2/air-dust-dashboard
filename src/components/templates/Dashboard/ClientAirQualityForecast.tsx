@@ -9,22 +9,26 @@ type Props = {
   initialData?: AirQualityForecastItem[];
 };
 
+function wrapForecast(items: AirQualityForecastItem[]) {
+  return {
+    response: {
+      header: { resultCode: '00', resultMsg: 'OK' },
+      body: { totalCount: items.length, pageNo: 1, numOfRows: items.length, items },
+    },
+  } as const;
+}
+
 export default function ClientAirQualityForecast({ initialData }: Props) {
-  // 서버 데이터가 없는 경우에만 클라이언트 쿼리 실행
   const { data, isLoading, isError } = useQuery({
     queryKey: ['airQuality', 'forecast'],
     queryFn: fetchAirQualityForecast,
     staleTime: 30 * 60 * 1000, // 30분
-    enabled: !initialData || initialData.length === 0,
+    initialData: initialData && initialData.length > 0 ? wrapForecast(initialData) : undefined,
   });
 
-  // 데이터 소스 결정 (서버 데이터 우선, 없으면 클라이언트 데이터)
-  const items = initialData?.length ? initialData : (data?.response?.body?.items ?? []);
+  const items = data?.response?.body?.items ?? [];
 
-  // 로딩 상태 확인
-  const isClientLoading = !initialData && isLoading;
-
-  if (isClientLoading) {
+  if (isLoading) {
     return <ForecastSkeleton />;
   }
 

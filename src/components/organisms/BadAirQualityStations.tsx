@@ -1,5 +1,4 @@
 import { BadAirQualityStationItem } from '@/features/air-quality/types';
-import InfoCard from '../atoms/InfoCard';
 import AirQualityGrade from '../atoms/AirQualityGrade';
 
 type Props = {
@@ -54,25 +53,34 @@ export default function BadAirQualityStations({ data, onSelectStation }: Props) 
           </tr>
         </thead>
         <tbody>
-          {data.map(item => (
-            <tr
-              key={item.stationName}
-              className='border-b border-border hover:bg-muted/50 cursor-pointer'
-              onClick={() => onSelectStation && onSelectStation(item.stationName)}>
-              <td className='p-3 font-medium'>{item.stationName}</td>
-              <td className='p-3 text-sm'>{item.addr}</td>
-              <td className='p-3 text-center font-bold'>{item.khaiValue}</td>
-              <td className='p-3'>
-                <div className='flex justify-center'>
-                  <AirQualityGrade
-                    grade={item.khaiGrade}
-                    size='sm'
-                  />
-                </div>
-              </td>
-              <td className='p-3'>{item.sidoName}</td>
-            </tr>
-          ))}
+          {(data ?? [])
+            .slice()
+            .sort((a, b) => {
+              if (a.sidoName === b.sidoName) {
+                if (a.stationName === b.stationName) return 0;
+                return a.stationName < b.stationName ? -1 : 1;
+              }
+              return a.sidoName < b.sidoName ? -1 : 1;
+            })
+            .map(item => (
+              <tr
+                key={`${item.sidoName}-${item.stationName}`}
+                className='border-b border-border hover:bg-muted/50 cursor-pointer'
+                onClick={() => onSelectStation && onSelectStation(item.stationName)}>
+                <td className='p-3 font-medium'>{item.stationName}</td>
+                <td className='p-3 text-sm'>{item.addr}</td>
+                <td className='p-3 text-center font-bold'>{item.khaiValue}</td>
+                <td className='p-3'>
+                  <div className='flex justify-center'>
+                    <AirQualityGrade
+                      grade={item.khaiGrade}
+                      size='sm'
+                    />
+                  </div>
+                </td>
+                <td className='p-3'>{item.sidoName}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

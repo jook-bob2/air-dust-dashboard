@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Noto_Sans_KR, Noto_Sans_Mono } from 'next/font/google';
 import './globals.css';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
@@ -7,21 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { getTheme } from '@/lib/theme';
 import { darkModeScript } from '@/lib/utils/darkMode';
-
-const notoSansKR = Noto_Sans_KR({
-  variable: '--font-noto-sans',
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  display: 'swap',
-  preload: true,
-});
-
-const notoSansMono = Noto_Sans_Mono({
-  variable: '--font-noto-mono',
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  display: 'swap',
-});
+import { notoSansKR, notoSansMono } from '@/styles/fonts';
 
 export const metadata: Metadata = {
   title: '미세먼지 알리미 - 전국 대기 품질 정보',

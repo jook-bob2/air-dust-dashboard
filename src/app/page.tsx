@@ -21,7 +21,7 @@ import {
   fetchBadAirQualityStations,
 } from '@/features/air-quality/api';
 
-// 서버 컴포넌트로 데이터 가져오는 함수들
+// 서버 컴포넌트: 서버에서 데이터 패칭 후 initialData로 전달 (Next fetch 메모이제이션 활용)
 async function SidoAirQualitySection({ sidoName }: { sidoName: string }) {
   try {
     const data = await fetchAirQualityBySido(sidoName);
@@ -44,7 +44,7 @@ async function AirQualityForecastSection() {
     const items = data?.response?.body?.items ?? [];
     return <ClientAirQualityForecast initialData={items} />;
   } catch (error) {
-    console.error('서버에서 대기질 예보 데이터를 가져오는 중 오류:', error);
+    console.error('대기질 예보 섹션 서버 패칭 중 오류:', error);
     return <ClientAirQualityForecast />;
   }
 }
@@ -55,7 +55,7 @@ async function WeeklyPM25ForecastSection() {
     const item = data?.response?.body?.items?.[0];
     return <ClientWeeklyPM25Forecast initialData={item} />;
   } catch (error) {
-    console.error('서버에서 주간 예보 데이터를 가져오는 중 오류:', error);
+    console.error('주간 예보 섹션 서버 패칭 중 오류:', error);
     return <ClientWeeklyPM25Forecast />;
   }
 }
@@ -66,12 +66,12 @@ async function BadStationsSection() {
     const items = data?.response?.body?.items ?? [];
     return <ClientBadAirQualityStations initialData={items} />;
   } catch (error) {
-    console.error('서버에서 나쁨 이상 측정소 데이터를 가져오는 중 오류:', error);
+    console.error('나쁨 이상 측정소 섹션 서버 패칭 중 오류:', error);
     return <ClientBadAirQualityStations />;
   }
 }
 
-export default function Dashboard() {
+export default async function Dashboard() {
   const defaultSido = '서울';
 
   return (

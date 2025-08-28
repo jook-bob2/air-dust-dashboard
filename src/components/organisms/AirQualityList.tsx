@@ -1,7 +1,6 @@
 'use client';
 
 import { SidoAirQualityItem } from '@/features/air-quality/types';
-import InfoCard from '../atoms/InfoCard';
 import AirQualityGrade from '../atoms/AirQualityGrade';
 
 type Props = {

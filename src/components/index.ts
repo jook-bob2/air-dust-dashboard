@@ -24,6 +24,7 @@ export { default as PollutantValue } from './molecules/PollutantValue';
 export { default as AirQualityGrade } from './atoms/AirQualityGrade';
 export { default as InfoCard } from './atoms/InfoCard';
 export { default as Skeleton } from './atoms/Skeleton';
+export { default as Logo } from './atoms/Logo';
 
 // 스켈레톤
 export { default as SidoAirQualitySkeleton } from '@/components/atoms/skeletons/SidoAirQualitySkeleton';

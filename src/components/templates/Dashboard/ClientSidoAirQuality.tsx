@@ -13,6 +13,16 @@ type Props = {
   showSelector?: boolean;
 };
 
+// ApiResponse 래퍼 (컴포넌트 로컬)
+function wrapSido(items: SidoAirQualityItem[]) {
+  return {
+    response: {
+      header: { resultCode: '00', resultMsg: 'OK' },
+      body: { totalCount: items.length, pageNo: 1, numOfRows: items.length, items },
+    },
+  } as const;
+}
+
 export default function ClientSidoAirQuality({
   sidoName: initialSidoName,
   initialData,
@@ -21,12 +31,13 @@ export default function ClientSidoAirQuality({
 }: Props) {
   const [selectedSido, setSelectedSido] = useState(initialSidoName);
 
-  // 서버 데이터가 없는 경우에만 클라이언트 쿼리 실행
   const { data, isLoading, isError } = useQuery({
     queryKey: ['airQuality', 'sido', selectedSido],
     queryFn: () => fetchAirQualityBySido(selectedSido),
     staleTime: 10 * 60 * 1000, // 10분
-    enabled: !initialData || initialData.length === 0,
+    // 초기 시도명과 선택된 시도가 같고, 서버 초기 데이터가 있을 경우 초기 데이터 주입
+    initialData:
+      selectedSido === initialSidoName && initialData && initialData.length > 0 ? wrapSido(initialData) : undefined,
   });
 
   // 외부 컴포넌트에 선택된 시도 변경을 알림
@@ -41,11 +52,7 @@ export default function ClientSidoAirQuality({
     setSelectedSido(sido);
   };
 
-  // 데이터 소스 결정 (서버 데이터 우선, 없으면 클라이언트 데이터)
-  const items = initialData?.length ? initialData : (data?.response?.body?.items ?? []);
-
-  // 로딩 상태 확인
-  const isClientLoading = !initialData && isLoading;
+  const items = data?.response?.body?.items ?? [];
 
   return (
     <div>
@@ -60,7 +67,7 @@ export default function ClientSidoAirQuality({
         </div>
       )}
 
-      {isClientLoading ? (
+      {isLoading ? (
         <SidoAirQualitySkeleton />
       ) : items.length > 0 ? (
         <SidoAirQuality data={items} />
