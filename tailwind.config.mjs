@@ -8,6 +8,43 @@ const config = {
   darkMode: 'class',
   theme: {
     extend: {
+      screens: {
+        // 1) 핵심: 모바일 퍼스트 min-width 세트 (대부분의 레이아웃 전환)
+        xs: '360px', // 소형 안드로이드, iPhone SE
+        xsm: '480px', // iPhone Pro, Galaxy S 시리즈 기준
+        sm: '640px', // 태블릿 세로/대형 폰
+        md: '768px', // 태블릿 가로 / 작은 노트북
+        lg: '1024px', // 일반 노트북
+        xl: '1280px', // 데스크탑 시작
+        '2xl': '1536px', // 큰 데스크탑
+        '3xl': '1920px', // FHD/대형 모니터
+
+        // 2) 보조: max-width 별칭 (딱 “이 이하”일 때 스타일 주기)
+        'xs-max': { max: '359px' },
+        'xsm-max': { max: '479px' }, // 추가
+        'sm-max': { max: '639px' },
+        'md-max': { max: '767px' },
+        'lg-max': { max: '1023px' },
+        'xl-max': { max: '1279px' },
+        '2xl-max': { max: '1535px' },
+
+        // 3) 보조: “구간 한정(range)” 별칭 (딱 해당 구간에만 적용)
+        'xs-only': { min: '360px', max: '479px' }, // 360~479px
+        'xsm-only': { min: '480px', max: '639px' }, // 480~639px
+        'sm-only': { min: '640px', max: '767px' },
+        'md-only': { min: '768px', max: '1023px' },
+        'lg-only': { min: '1024px', max: '1279px' },
+        'xl-only': { min: '1280px', max: '1535px' },
+
+        // 4) 특수 조건(선택): 방향/포인터/레티나 등
+        landscape: { raw: '(orientation: landscape)' },
+        portrait: { raw: '(orientation: portrait)' },
+        hoverable: { raw: '(hover: hover)' }, // 마우스/트랙패드 환경
+        coarse: { raw: '(pointer: coarse)' }, // 터치 우선 환경
+        retina: {
+          raw: '(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)',
+        },
+      },
       fontFamily: {
         sans: ['var(--font-noto-sans)'],
         mono: ['var(--font-noto-mono)'],

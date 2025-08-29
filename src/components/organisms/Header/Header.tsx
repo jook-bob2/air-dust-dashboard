@@ -31,7 +31,7 @@ export default function Header() {
           </Link>
 
           {/* 데스크톱 네비게이션 */}
-          <nav className='hidden md:flex items-center space-x-6'>
+          <nav className='hidden lg:flex items-center space-x-6'>
             {navItems.map(item => (
               <Link
                 key={item.href}
@@ -44,14 +44,14 @@ export default function Header() {
 
           {/* 오른쪽 영역: 검색 및 테마 */}
           <div className='flex items-center space-x-4'>
-            <div className='hidden md:block w-64'>
+            <div className='hidden lg:block w-64'>
               <SearchBar />
             </div>
             <ThemeSwitcher />
 
             {/* 모바일 메뉴 버튼 */}
             <button
-              className='md:hidden p-2 rounded-md hover:bg-muted transition-colors'
+              className='lg:hidden p-2 rounded-md hover:bg-muted transition-colors'
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label='메뉴'>
               <svg
@@ -73,7 +73,7 @@ export default function Header() {
 
         {/* 모바일 메뉴 */}
         {mobileMenuOpen && (
-          <div className='md:hidden mt-4 py-2 border-t border-border'>
+          <div className='lg:hidden mt-4 py-2 border-t border-border'>
             <nav className='flex flex-col space-y-4 mt-2'>
               {navItems.map(item => (
                 <Link

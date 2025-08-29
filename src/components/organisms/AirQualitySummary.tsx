@@ -11,10 +11,10 @@ export default function AirQualitySummary({ data }: Props) {
 
   return (
     <div className='flex flex-col gap-4'>
-      <div className='flex justify-between items-center border-b border-border pb-3'>
-        <div>
-          <p className='text-sm text-muted-foreground'>측정 시간: {data.dataTime}</p>
+      <div className='flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center border-b border-border pb-3'>
+        <div className='flex flex-col justify-between gap-2 flex-wrap items-center sm:items-start'>
           <h4 className='text-xl font-bold mt-1'>{data.sidoName}</h4>
+          <p className='text-sm text-muted-foreground'>측정 시간: {data.dataTime}</p>
         </div>
         <div className='flex flex-col items-center'>
           <div className='text-lg font-semibold mb-1'>통합 대기 환경</div>

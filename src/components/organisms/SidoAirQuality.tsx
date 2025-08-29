@@ -13,7 +13,7 @@ export default function SidoAirQuality({ data }: Props) {
 
   return (
     <div className='space-y-6'>
-      <div className='bg-muted/20 p-3 rounded-md'>
+      <div className='flex justify-between items-center gap-2 flex-wrap bg-muted/20 p-3 rounded-md'>
         <h3 className='text-lg font-medium mb-1'>{data[0].stationName} 측정소</h3>
         <p className='text-sm text-muted-foreground'>측정 시각: {data[0].dataTime}</p>
       </div>

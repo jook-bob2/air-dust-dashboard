@@ -42,7 +42,7 @@ export default function BadAirQualityStations({ data, onSelectStation }: Props) 
         <p className='font-medium text-destructive'>주의: 아래 측정소들의 대기질이 나쁨 이상으로 측정되었습니다.</p>
         <p className='text-muted-foreground mt-1'>외출 시 마스크 착용을 권장하며, 호흡기 질환자는 외출을 자제하세요.</p>
       </div>
-      <table className='w-full'>
+      <table className='w-full overflow-x-auto min-w-[520px]'>
         <thead>
           <tr className='bg-muted'>
             <th className='p-3 text-left font-medium'>측정소</th>

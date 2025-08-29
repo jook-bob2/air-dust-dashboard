@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   SidoSelector,
@@ -12,27 +12,7 @@ import {
 import { SIDO_LIST } from '@/features/air-quality/constants';
 import type { SidoAirQualityItem } from '@/features/air-quality/types';
 import { fetchAirQualityBySido } from '@/features/air-quality/api';
-
-// 즐겨찾기 로컬 저장소 키
-const FAV_KEY = 'fav_regions_v1';
-
-function useFavorites() {
-  const [favs, setFavs] = useState<string[]>([]);
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(FAV_KEY);
-      if (raw) setFavs(JSON.parse(raw));
-    } catch {}
-  }, []);
-  const toggle = useCallback((key: string) => {
-    setFavs(prev => {
-      const next = prev.includes(key) ? prev.filter(v => v !== key) : [...prev, key];
-      localStorage.setItem(FAV_KEY, JSON.stringify(next));
-      return next;
-    });
-  }, []);
-  return { favs, toggle };
-}
+import { useFavorite } from '@/hooks/useFavorite';
 
 function ModeToggle({ mode, onChange }: { mode: 'list' | 'map'; onChange: (m: 'list' | 'map') => void }) {
   return (
@@ -62,8 +42,14 @@ export default function ClientRegions({ initialSido }: { initialSido?: string })
   const [sido, setSido] = useState(initialSido ?? SIDO_LIST[0]);
   const [mode, setMode] = useState<'list' | 'map'>('list');
   const [sigungu, setSigungu] = useState<string | null>(null);
-  const { favs, toggle } = useFavorites();
+  const { isFavorite, toggle } = useFavorite(sido);
   // 위치 기반 날씨 → 요구사항 변경으로 미사용. 현 미세먼지 정보로 대체 표시.
+
+  // Hydration-safe mount gate to avoid SSR/client mismatch due to time-sensitive external data
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // React Query: 시도 데이터
   const { data, isLoading } = useQuery({
@@ -114,10 +100,26 @@ export default function ClientRegions({ initialSido }: { initialSido?: string })
     return { pm25Avg, pm10Avg, pm25Grade, pm10Grade, dataTime };
   }, [items]);
 
+  if (!mounted) {
+    return (
+      <div className='space-y-6'>
+        <div className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
+          <div className='flex items-center gap-3'>
+            <SidoSelector
+              selectedSido={sido}
+              onSelect={setSido}
+            />
+          </div>
+        </div>
+        <AirQualityListSkeleton />
+      </div>
+    );
+  }
+
   return (
     <div className='space-y-6'>
       <div className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
-        <div className='flex items-center gap-3'>
+        <div className='flex flex-wrap items-center gap-3'>
           <SidoSelector
             selectedSido={sido}
             onSelect={setSido}
@@ -128,18 +130,20 @@ export default function ClientRegions({ initialSido }: { initialSido?: string })
             placeholder='시군구/측정소 검색'
             onChange={e => setSigungu(e.target.value || null)}
           />
-          <ModeToggle
-            mode={mode}
-            onChange={setMode}
-          />
+          <div className='w-full sm:w-auto'>
+            <ModeToggle
+              mode={mode}
+              onChange={setMode}
+            />
+          </div>
         </div>
         <div className='flex items-center gap-3'>
           <button
-            onClick={() => toggle(`${sido}`)}
+            onClick={() => toggle()}
             className='px-3 py-2 border rounded-md'
-            aria-pressed={favs.includes(sido)}
+            aria-pressed={isFavorite}
             aria-label='즐겨찾기 지역 토글'>
-            {favs.includes(sido) ? '★ 즐겨찾기' : '☆ 즐겨찾기'}
+            {isFavorite ? '★ 즐겨찾기' : '☆ 즐겨찾기'}
           </button>
         </div>
       </div>
@@ -182,7 +186,7 @@ export default function ClientRegions({ initialSido }: { initialSido?: string })
       ) : null}
 
       {/* 리스트 */}
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+      <div className='grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4'>
         {filteredGroups.length === 0 && <div className='text-muted-foreground'>표시할 정보가 없습니다 (N/A)</div>}
         {filteredGroups.map(([station, arr]) => {
           const first = arr[0];
@@ -203,7 +207,7 @@ export default function ClientRegions({ initialSido }: { initialSido?: string })
                   <span className='text-sm'>{first.pm25Value || 'N/A'}</span>
                 </div>
               </div>
-              <div className='grid grid-cols-2 gap-2 text-sm'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm'>
                 <PollutantValue
                   name='pm25'
                   value={first.pm25Value}
