@@ -52,10 +52,11 @@ export function useFavorite(key: string, initial: boolean = false) {
         setIsFav(prev => !prev);
       } catch (e) {
         // 실패 시 롤백: 동일 토글을 다시 적용하여 이전 상태로 복귀
+        console.log('favorite toggle error ', e);
         addOptimistic('toggle');
       }
     });
-  }, [router, addOptimistic, isFav, key]);
+  }, [addOptimistic, router]);
 
   return { isFavorite: optimisticFav, toggle };
 }

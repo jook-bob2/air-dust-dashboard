@@ -29,21 +29,6 @@ function gradeLabel(grade?: string | null) {
   }
 }
 
-function gradeColor(grade?: string | null) {
-  switch (grade) {
-    case '1':
-      return '#22c55e'; // green-500
-    case '2':
-      return '#3b82f6'; // blue-500
-    case '3':
-      return '#f59e0b'; // amber-500
-    case '4':
-      return '#ef4444'; // red-500
-    default:
-      return '#6b7280'; // gray-500
-  }
-}
-
 function gradeBgClass(grade?: string | null) {
   switch (grade) {
     case '1':
@@ -115,6 +100,7 @@ export default function AirQualityList({ items, onSelectStation }: Props) {
       });
     } catch (e) {
       // no-op; modal throws in SSR, but this is client component
+      console.log('handleRowClick error ', e);
     }
   };
 
