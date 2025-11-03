@@ -15,8 +15,8 @@ import { fetchAirQualityBySido } from '@/features/air-quality/api';
 import { useFavorite } from '@/hooks/useFavorite';
 
 /**
- * @param mode
  * @param onChange
+ * @param mode
  * @constructor
  */
 function ModeToggle({ mode, onChange }: { mode: 'list' | 'map'; onChange: (m: 'list' | 'map') => void }) {
