@@ -14,6 +14,11 @@ import type { SidoAirQualityItem } from '@/features/air-quality/types';
 import { fetchAirQualityBySido } from '@/features/air-quality/api';
 import { useFavorite } from '@/hooks/useFavorite';
 
+/**
+ * @param onChange
+ * @param mode
+ * @constructor
+ */
 function ModeToggle({ mode, onChange }: { mode: 'list' | 'map'; onChange: (m: 'list' | 'map') => void }) {
   return (
     <div
